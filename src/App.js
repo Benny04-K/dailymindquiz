@@ -63,7 +63,6 @@ function decodeHTML(str) {
 
 async function fetchQuestions(categoryId) {
   const base = `https://opentdb.com/api.php?amount=10&category=${categoryId}&type=multiple&difficulty=medium`;
-  // Use CORS proxy on localhost; direct URL in production
   const url = window.location.hostname === "localhost"
     ? `https://corsproxy.io/?${encodeURIComponent(base)}`
     : base;
@@ -245,7 +244,7 @@ function HomeScreen({ category, stats, onStart, loading, error, onRetry }) {
           Test Your<br /><span style={{ color:"var(--gold)" }}>Mind Daily</span>
         </h1>
         <p style={s.heroP}>
-          Fresh questions every day from a live trivia database. Challenge yourself, learn something new, share your score.
+          Your daily dose of brain fuel — ten questions, one chance, zero excuses.
         </p>
       </div>
 
@@ -382,11 +381,15 @@ function QuizScreen({ questionIndex, score, question, onAnswer, answered, select
 // ── ResultScreen ──────────────────────────────────────────────────────────────
 function ResultScreen({ score, results, today, total, onHome }) {
   const m = RESULT_MSGS.find(x => score >= x.min);
+
+  // Share text uses window.location.href so it always shows the real hosted URL
   function share() {
-    const text = `🧠 DailyMind Quiz\n📅 ${today.toLocaleDateString()}\n✅ I scored ${score}/${total}!\n\nCan you beat me? Play at dailymind.app`;
+    const siteUrl = window.location.href;
+    const text = `🧠 DailyMind Quiz\n📅 ${today.toLocaleDateString()}\n✅ I scored ${score}/${total}!\n\nCan you beat me? Play at ${siteUrl}`;
     if (navigator.share) navigator.share({ title:"DailyMind Score", text });
     else navigator.clipboard.writeText(text);
   }
+
   return (
     <div style={s.screen}>
       <div style={s.resultWrapper}>
@@ -507,7 +510,7 @@ export default function App() {
 
   function goHome() {
     setScreen("home");
-    loadQuestions(); // fetch fresh questions
+    loadQuestions();
     window.scrollTo(0, 0);
   }
 
@@ -550,8 +553,13 @@ export default function App() {
         />
       )}
 
+      {/* ── Footer ── */}
       <footer style={s.footer}>
-        DailyMind © {today.getFullYear()} &nbsp;·&nbsp; Fresh questions every day.
+        DailyMind &copy; {today.getFullYear()}
+        &nbsp;&middot;&nbsp;
+        Founded by <strong>Rojar Benny K</strong>
+        &nbsp;&middot;&nbsp;
+        Fresh questions every day.
       </footer>
     </div>
   );
