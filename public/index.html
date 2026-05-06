@@ -4,52 +4,77 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#C9A84C" />
+
+    <!-- AdSense account verification -->
     <meta name="google-adsense-account" content="ca-pub-4969283434635432">
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Daily Mind is an interactive quiz platform designed to boost your knowledge every day. Explore a variety of fun and engaging quizzes across different topics, challenge yourself, and improve your thinking skills with daily questions."
-    />
+
+    <!-- PRIMARY SEO -->
+    <title>DailyMind — Free Daily Quiz & Trivia Game</title>
+    <meta name="description" content="Play DailyMind's free daily quiz! 10 new trivia questions every day covering science, history, geography, sports and more. Test your knowledge and share your score!" />
+    <meta name="keywords" content="daily quiz, free trivia game, online quiz, general knowledge quiz, daily trivia, quiz game, brain teaser, trivia questions" />
+    <meta name="author" content="DailyMind" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://dailymindquiz.online" />
+
+    <!-- OPEN GRAPH (WhatsApp, Facebook previews) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dailymindquiz.online" />
+    <meta property="og:title" content="DailyMind — Free Daily Quiz & Trivia Game" />
+    <meta property="og:description" content="10 new trivia questions every day. Test your knowledge on science, history, geography and more. Free to play!" />
+    <meta property="og:image" content="https://dailymindquiz.online/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="DailyMind Quiz" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://dailymindquiz.online" />
+    <meta name="twitter:title" content="DailyMind — Free Daily Quiz & Trivia Game" />
+    <meta name="twitter:description" content="10 new trivia questions every day. Test your knowledge and share your score!" />
+    <meta name="twitter:image" content="https://dailymindquiz.online/og-image.png" />
+
+    <!-- STRUCTURED DATA (helps Google understand your site) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "DailyMind Quiz",
+      "url": "https://dailymindquiz.online",
+      "description": "Free daily trivia quiz with 10 new questions every day covering science, history, geography, sports and general knowledge.",
+      "applicationCategory": "GameApplication",
+      "genre": "Trivia",
+      "browserRequirements": "Requires JavaScript",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- PWA manifest & icons -->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>DailyMind</title>
+    <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4969283434635432"
-     crossorigin="anonymous"></script>
-     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NNJB501H8D"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+      crossorigin="anonymous"></script>
 
-  gtag('config', 'G-NNJB501H8D');
-</script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNJB501H8D"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NNJB501H8D');
+    </script>
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
