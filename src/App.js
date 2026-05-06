@@ -84,6 +84,14 @@ async function fetchQuestions(categoryId) {
   });
 }
 
+// ── Ad Slot IDs ───────────────────────────────────────────────────────────────
+// Each ad unit must have its own unique slot ID from your AdSense dashboard.
+// Go to AdSense → Ads → By ad unit → create separate units for each placement.
+const AD_CLIENT   = "ca-pub-4969283434635432";
+const AD_SLOT_TOP    = "4706096028"; // ← your existing top banner slot
+const AD_SLOT_MID    = "XXXXXXXXXX"; // ← replace with your mid-quiz slot ID
+const AD_SLOT_BOTTOM = "YYYYYYYYYY"; // ← replace with your result/bottom slot ID
+
 // ── Constants ─────────────────────────────────────────────────────────────────
 const RESULT_MSGS = [
   { min:9, title:"Outstanding!", msg:"You're in the top tier. Truly impressive knowledge!" },
@@ -95,13 +103,6 @@ const RESULT_MSGS = [
 // ── Styles ────────────────────────────────────────────────────────────────────
 const s = {
   page:      { display:"flex", flexDirection:"column", alignItems:"center", minHeight:"100vh" },
-  adBanner:  { width:"100%", background:"#fff", borderBottom:"1px solid var(--border)",
-               display:"flex", alignItems:"center", justifyContent:"center",
-               padding:"10px", minHeight:"60px" },
-  adSlot:    { width:"min(728px,100%)", height:"40px", background:"#f0ece4",
-               border:"1px dashed var(--border)", borderRadius:"4px",
-               display:"flex", alignItems:"center", justifyContent:"center",
-               fontSize:"11px", color:"var(--muted)", letterSpacing:"0.05em", textTransform:"uppercase" },
   header:    { textAlign:"center", padding:"40px 20px 20px" },
   logo:      { fontFamily:"'Playfair Display',serif", fontSize:"13px", letterSpacing:"0.3em",
                textTransform:"uppercase", color:"var(--gold)", marginBottom:"6px" },
@@ -158,11 +159,6 @@ const s = {
                color:"#fff", border:"none", padding:"16px", borderRadius:"12px",
                fontFamily:"'DM Sans',sans-serif", fontSize:"15px", fontWeight:500,
                cursor:"pointer", letterSpacing:"0.02em", transition:"all 0.2s" },
-  midAd:     { background:"var(--card)", border:"1px dashed var(--border)", borderRadius:"12px",
-               padding:"16px", textAlign:"center", margin:"16px 0", fontSize:"11px",
-               color:"var(--muted)", textTransform:"uppercase", letterSpacing:"0.1em",
-               minHeight:"90px", display:"flex", alignItems:"center", justifyContent:"center",
-               flexDirection:"column", gap:"4px" },
   resultWrapper:{ textAlign:"center", padding:"20px 0" },
   resultCircle: { width:"140px", height:"140px", borderRadius:"50%",
                   border:"3px solid var(--gold)", display:"flex", flexDirection:"column",
@@ -189,19 +185,8 @@ const s = {
                   background:"transparent", color:"var(--ink)", border:"1.5px solid var(--border)",
                   padding:"14px 28px", borderRadius:"50px", fontFamily:"'DM Sans',sans-serif",
                   fontSize:"14px", fontWeight:500, cursor:"pointer", margin:"4px", transition:"all 0.2s" },
-  bottomAd:     { background:"var(--card)", border:"1px dashed var(--border)", borderRadius:"12px",
-                  padding:"16px", textAlign:"center", margin:"24px 0 0", fontSize:"11px",
-                  color:"var(--muted)", textTransform:"uppercase", letterSpacing:"0.1em",
-                  minHeight:"90px", display:"flex", alignItems:"center", justifyContent:"center",
-                  flexDirection:"column", gap:"4px" },
   footer:       { textAlign:"center", padding:"20px", fontSize:"12px", color:"var(--muted)",
                   borderTop:"1px solid var(--border)", width:"100%", marginTop:"auto" },
-  loadingWrap:  { display:"flex", flexDirection:"column", alignItems:"center",
-                  justifyContent:"center", padding:"60px 20px", gap:"20px" },
-  spinner:      { width:"44px", height:"44px", borderRadius:"50%",
-                  border:"3px solid var(--border)", borderTopColor:"var(--gold)",
-                  animation:"spin 0.8s linear infinite" },
-  loadingText:  { fontFamily:"'Playfair Display',serif", fontSize:"18px", color:"var(--muted)" },
   errorBox:     { background:"#F5EBEB", border:"1px solid #DDB8B8", borderRadius:"16px",
                   padding:"28px", textAlign:"center", margin:"20px 0" },
   errorTitle:   { fontFamily:"'Playfair Display',serif", fontSize:"20px",
@@ -209,14 +194,71 @@ const s = {
   errorMsg:     { fontSize:"14px", color:"var(--muted)", marginBottom:"20px", lineHeight:1.6 },
 };
 
-// ── Shared components ─────────────────────────────────────────────────────────
+// ── Ad Components ─────────────────────────────────────────────────────────────
+// Each component uses its own unique slot ID.
+// Replace AD_SLOT_MID and AD_SLOT_BOTTOM with real slot IDs from AdSense dashboard.
+
 function AdBanner() {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {}
+  }, []);
   return (
-    <div style={s.adBanner}>
-      <div style={s.adSlot}>Advertisement · 728×90</div>
+    <div style={{ textAlign:"center", margin:"20px 0", width:"100%" }}>
+      <ins
+        className="adsbygoogle"
+        style={{ display:"block" }}
+        data-ad-client={AD_CLIENT}
+        data-ad-slot={AD_SLOT_TOP}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
     </div>
   );
 }
+
+function MidAd() {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {}
+  }, []);
+  return (
+    <div style={{ textAlign:"center", margin:"16px 0" }}>
+      <ins
+        className="adsbygoogle"
+        style={{ display:"block" }}
+        data-ad-client={AD_CLIENT}
+        data-ad-slot={AD_SLOT_MID}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
+}
+
+function BottomAd() {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {}
+  }, []);
+  return (
+    <div style={{ textAlign:"center", margin:"24px 0 0" }}>
+      <ins
+        className="adsbygoogle"
+        style={{ display:"block" }}
+        data-ad-client={AD_CLIENT}
+        data-ad-slot={AD_SLOT_BOTTOM}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
 function Header({ dateStr }) {
   return (
     <header style={s.header}>
@@ -224,14 +266,6 @@ function Header({ dateStr }) {
       <div style={s.divider} />
       <div style={s.dateLine}>{dateStr}</div>
     </header>
-  );
-}
-function BottomAd({ label = "300×250" }) {
-  return (
-    <div style={s.bottomAd}>
-      <div>Advertisement</div>
-      <div style={{ fontSize:"10px" }}>{label}</div>
-    </div>
   );
 }
 
@@ -291,10 +325,8 @@ function HomeScreen({ category, stats, onStart, loading, error, onRetry }) {
         ))}
       </div>
 
-      <div style={{ ...s.bottomAd, marginTop:"28px" }}>
-        <div>Advertisement</div>
-        <div style={{ fontSize:"10px" }}>300×250</div>
-      </div>
+      {/* Bottom ad on home screen — uses its own slot */}
+      <BottomAd />
     </div>
   );
 }
@@ -336,12 +368,8 @@ function QuizScreen({ questionIndex, score, question, onAnswer, answered, select
         <div style={s.qText}>{question.q}</div>
       </div>
 
-      {questionIndex === 4 && (
-        <div style={s.midAd}>
-          <div>Advertisement</div>
-          <div style={{ fontSize:"10px" }}>320×50 Banner</div>
-        </div>
-      )}
+      {/* Mid-quiz ad shown at question 5 — uses its own unique slot */}
+      {questionIndex === 4 && <MidAd />}
 
       <div style={s.optionsGrid}>
         {question.options.map((opt, i) => (
@@ -382,7 +410,6 @@ function QuizScreen({ questionIndex, score, question, onAnswer, answered, select
 function ResultScreen({ score, results, today, total, onHome }) {
   const m = RESULT_MSGS.find(x => score >= x.min);
 
-  // Share text uses window.location.href so it always shows the real hosted URL
   function share() {
     const siteUrl = window.location.href;
     const text = `🧠 DailyMind Quiz\n📅 ${today.toLocaleDateString()}\n✅ I scored ${score}/${total}!\n\nCan you beat me? Play at ${siteUrl}`;
@@ -423,7 +450,8 @@ function ResultScreen({ score, results, today, total, onHome }) {
           </button>
         </div>
 
-        <BottomAd label="300×250 · Google AdSense" />
+        {/* Bottom ad on result screen — uses its own unique slot */}
+        <BottomAd />
       </div>
     </div>
   );
@@ -516,6 +544,7 @@ export default function App() {
 
   return (
     <div style={s.page}>
+      {/* Top banner ad — shown on every screen */}
       <AdBanner />
       <Header dateStr={dateStr} />
 
@@ -553,7 +582,6 @@ export default function App() {
         />
       )}
 
-      {/* ── Footer ── */}
       <footer style={s.footer}>
         DailyMind &copy; {today.getFullYear()}
         &nbsp;&middot;&nbsp;
