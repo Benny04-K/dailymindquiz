@@ -244,7 +244,7 @@ function HomeScreen({ category, stats, onStart, loading, error, onRetry }) {
         <h1 style={s.h1}>
           Test Your<br /><span style={{ color:"var(--gold)" }}>Mind Daily</span>
         </h1>
-        <p style={s.heroPgit add src/App.js}>
+        <p style={s.heroP}>
           Fresh questions every day from a live trivia database. Challenge yourself, learn something new, share your score.
         </p>
       </div>
