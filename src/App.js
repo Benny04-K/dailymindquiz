@@ -35,7 +35,6 @@ document.head.appendChild(fontLink);
 const globalCSS = `
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   :root {
-  
     --bg-gradient: linear-gradient(135deg, #F5F3FF 0%, #FDF2F8 50%, #EFF6FF 100%);
     --primary:   #7C3AED;
     --secondary: #DB2777;
@@ -169,10 +168,11 @@ const globalCSS = `
     background:rgba(255,160,0,0.12); color:#b45309;
     border-radius:8px; padding:3px 10px; font-size:11px; font-weight:600;
   }
-  [data-theme="dark"] .firebase-badge { background:rgba(251,191,36,0.15); color:#fbbf24; 
+  [data-theme="dark"] .firebase-badge { background:rgba(251,191,36,0.15); color:#fbbf24; }
   @media (max-width: 480px) {
     body { overflow-x: hidden; }
-    .card { border-radius: 12px; }}
+    .card { border-radius: 12px; }
+  }
 `;
 const styleTag = document.createElement("style");
 styleTag.textContent = globalCSS;
@@ -218,9 +218,6 @@ const DID_YOU_KNOW = [
   "Bananas are technically berries, but strawberries are not.",
 ];
 
-/* const AD_CLIENT   = "ca-pub-4969283434635432";
-const AD_SLOT_TOP = "4706096028"; */
-
 /* ─── Firebase Helpers ───────────────────────────────────────────── */
 async function fbLoadUserData(uid) {
   try {
@@ -239,9 +236,21 @@ async function fbLoadUserData(uid) {
   }
 }
 
+// ── UPDATED: saves username at top level AND inside profile ─────────
 async function fbSaveProfile(uid, data) {
   try {
+    const topLevel = {};
+
+    // Mirror username to the top level so it's easy to query in Firestore
+    if (data.username) {
+      topLevel.username  = data.username;
+      topLevel.updatedAt = serverTimestamp();
+    }
+
     await setDoc(doc(db, "users", uid), {
+      // Top-level fields (only set when present so we don't overwrite with null)
+      ...topLevel,
+      // Nested profile object keeps all settings together
       profile: { ...data, lastSeen: serverTimestamp() },
     }, { merge: true });
   } catch (e) { console.warn("Firebase profile save failed", e); }
@@ -823,7 +832,7 @@ export default function App() {
   // Quiz state
   const [screen,         setScreen]         = useState("setup");
   const [questions,      setQuestions]      = useState([]);
-  const [currentDiff,    setCurrentDiff]    = useState(null);  // full difficulty object
+  const [currentDiff,    setCurrentDiff]    = useState(null);
   const [loading,        setLoading]        = useState(false);
   const [error,          setError]          = useState(false);
   const [currentQ,       setCurrentQ]       = useState(0);
@@ -832,14 +841,13 @@ export default function App() {
   const [selectedIdx,    setSelectedIdx]    = useState(null);
   const [results,        setResults]        = useState([]);
   const [mascotMood,     setMascotMood]     = useState("idle");
-  const [currentCat,     setCurrentCat]     = useState(null);  // full category object
+  const [currentCat,     setCurrentCat]     = useState(null);
 
   // ── Firebase: sign in anonymously on mount ──────────────────────
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUid(user.uid);
-        // Load data from Firestore; fall back to localStorage if it fails
         const { profile, stats: fbStats } = await fbLoadUserData(user.uid);
         if (profile?.username) {
           setUsername(profile.username);
@@ -856,7 +864,6 @@ export default function App() {
       } else {
         try {
           await signInAnonymously(auth);
-          // onAuthStateChanged will fire again with the new user
         } catch (e) {
           console.warn("Anonymous sign-in failed, running offline", e);
           setFbReady(true);
@@ -935,10 +942,8 @@ export default function App() {
           streak:   prev.lastDate === yesterday ? prev.streak + 1 : 1,
           lastDate: todayStr,
         };
-        // Persist locally
         localStorage.setItem("quizStats", JSON.stringify(newStats));
 
-        // Persist to Firebase (fire & forget)
         if (uid) {
           fbSaveStats(uid, newStats);
           fbSaveHistory(uid, {
@@ -948,7 +953,6 @@ export default function App() {
             score,
             total: questions.length,
           });
-          // Also update lastSeen on profile
           fbSaveProfile(uid, { lastSeen: serverTimestamp() });
         }
 
@@ -986,7 +990,6 @@ export default function App() {
             background:"linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
             WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text",
           }}>DailyMind Quiz</div>
-          {/* Shows a small indicator when Firebase is connected */}
           {uid && (
             <span className="firebase-badge" title={`Firebase UID: ${uid}`}>
               🔥 synced
