@@ -35,6 +35,7 @@ document.head.appendChild(fontLink);
 const globalCSS = `
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   :root {
+  
     --bg-gradient: linear-gradient(135deg, #F5F3FF 0%, #FDF2F8 50%, #EFF6FF 100%);
     --primary:   #7C3AED;
     --secondary: #DB2777;
@@ -168,7 +169,10 @@ const globalCSS = `
     background:rgba(255,160,0,0.12); color:#b45309;
     border-radius:8px; padding:3px 10px; font-size:11px; font-weight:600;
   }
-  [data-theme="dark"] .firebase-badge { background:rgba(251,191,36,0.15); color:#fbbf24; }
+  [data-theme="dark"] .firebase-badge { background:rgba(251,191,36,0.15); color:#fbbf24; 
+  @media (max-width: 480px) {
+    body { overflow-x: hidden; }
+    .card { border-radius: 12px; }}
 `;
 const styleTag = document.createElement("style");
 styleTag.textContent = globalCSS;
@@ -410,7 +414,7 @@ function SetupScreen({ username, stats, onStart, loading, error, onRetry, play }
   function handleStart() { if (selCat && selDiff) { play("click"); onStart(selCat, selDiff); } }
 
   return (
-    <div style={{ width:"100%", maxWidth:"680px", padding:"0 20px 60px" }}>
+    <div style={{ width:"100%", maxWidth:"680px", padding:"0 16px 60px" }}>
       <div className="fadeUp" style={{ textAlign:"center", padding:"10px 0 24px" }}>
         <div style={{ marginBottom:"12px" }}><Mascot mood="idle" /></div>
         <h1 style={{
@@ -466,7 +470,7 @@ function SetupScreen({ username, stats, onStart, loading, error, onRetry, play }
             }}>
               Step 1 · Pick a Category
             </div>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"10px" }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(140px, 1fr))", gap:"10px" }}>
               {CATEGORIES.map(cat => (
                 <button key={cat.id} onClick={() => pickCat(cat)} style={{
                   background: selCat?.id === cat.id
