@@ -220,14 +220,15 @@ const AD_SLOT_TOP = "4706096028";
 /* ─── Firebase Helpers ───────────────────────────────────────────── */
 async function fbLoadUserData(uid) {
   try {
-    const [profileSnap, statsSnap] = await Promise.all([
-      getDoc(doc(db, "users", uid, "profile")),
-      getDoc(doc(db, "users", uid, "stats")),
-    ]);
-    return {
-      profile: profileSnap.exists() ? profileSnap.data() : null,
-      stats:   statsSnap.exists()   ? statsSnap.data()   : null,
-    };
+    const userSnap = await getDoc(doc(db, "users", uid));
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      return {
+        profile: data.profile || null,
+        stats:   data.stats   || null,
+      };
+    }
+    return { profile: null, stats: null };
   } catch (e) {
     console.warn("Firebase load failed, using localStorage fallback", e);
     return { profile: null, stats: null };
@@ -236,16 +237,15 @@ async function fbLoadUserData(uid) {
 
 async function fbSaveProfile(uid, data) {
   try {
-    await setDoc(doc(db, "users", uid, "profile"), {
-      ...data,
-      lastSeen: serverTimestamp(),
+    await setDoc(doc(db, "users", uid), {
+      profile: { ...data, lastSeen: serverTimestamp() },
     }, { merge: true });
   } catch (e) { console.warn("Firebase profile save failed", e); }
 }
 
 async function fbSaveStats(uid, stats) {
   try {
-    await setDoc(doc(db, "users", uid, "stats"), stats);
+    await setDoc(doc(db, "users", uid), { stats }, { merge: true });
   } catch (e) { console.warn("Firebase stats save failed", e); }
 }
 
