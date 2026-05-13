@@ -214,8 +214,8 @@ const DID_YOU_KNOW = [
   "Bananas are technically berries, but strawberries are not.",
 ];
 
-const AD_CLIENT   = "ca-pub-4969283434635432";
-const AD_SLOT_TOP = "4706096028";
+/* const AD_CLIENT   = "ca-pub-4969283434635432";
+const AD_SLOT_TOP = "4706096028"; */
 
 /* ─── Firebase Helpers ───────────────────────────────────────────── */
 async function fbLoadUserData(uid) {
@@ -760,7 +760,7 @@ function ResultScreen({ score, results, total, onHome, username, play }) {
 }
 
 /* ─── Ad Banner ──────────────────────────────────────────────────── */
-function AdBanner() {
+/* function AdBanner() {
   useEffect(() => {
     try { window.adsbygoogle = window.adsbygoogle || []; window.adsbygoogle.push({}); } catch (_) {}
   }, []);
@@ -771,7 +771,7 @@ function AdBanner() {
         data-ad-format="auto" data-full-width-responsive="true" />
     </div>
   );
-}
+} */
 
 /* ─── Helpers ────────────────────────────────────────────────────── */
 function decodeHTML(str) {
@@ -969,7 +969,7 @@ export default function App() {
     <div style={{ display:"flex", flexDirection:"column", alignItems:"center", minHeight:"100vh", paddingBottom:"20px" }}>
       {!username && fbReady && <UsernameModal onSave={saveUsername} />}
 
-      <AdBanner />
+      {/* <AdBanner /> */}
 
       {/* Top bar */}
       <div style={{
