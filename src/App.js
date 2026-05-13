@@ -20,6 +20,7 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
+// eslint-disable-next-line no-unused-vars
 const analytics   = getAnalytics(firebaseApp);
 const auth        = getAuth(firebaseApp);
 const db          = getFirestore(firebaseApp);
